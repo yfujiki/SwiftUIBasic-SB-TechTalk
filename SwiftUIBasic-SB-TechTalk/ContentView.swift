@@ -8,18 +8,37 @@
 
 import SwiftUI
 
-struct ContentView: View {
+struct NextView: View {
+    var catNo: Int
+
     var body: some View {
         VStack {
+            Text("Cat no. \(catNo)")
+            GeometryReader { geometry in
+                Image(String(format: "%02d", self.catNo))
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: geometry.size.width)
+            }
+        }
+    }
+}
+
+struct ContentView: View {
+    var body: some View {
+
+        NavigationView {
             List(0..<50) { i in
-                HStack(spacing: 16) {
-                    Image(String(format: "%02d", i + 1))
-                    VStack(alignment: .leading, spacing: 16) {
-                        Text("Cat no. \(i + 1)")
-                        Text("\(self.dateFormatter.string(from: Date()))")
+                NavigationLink(destination: NextView(catNo: i + 1)) {
+                    HStack(spacing: 16) {
+                        Image(String(format: "%02d", i + 1))
+                        VStack(alignment: .leading, spacing: 16) {
+                            Text("Cat no. \(i + 1)")
+                            Text("\(self.dateFormatter.string(from: Date()))")
+                        }
                     }
                 }
-            }
+            }.navigationBarTitle("List of my cats")
         }
     }
 
